@@ -12,6 +12,19 @@ namespace :scrape_data do
     desc '電撃文庫の新刊情報取得'
     task :dengeki => :environment do
         #   ===================
+        #       文字列処理
+        #   ===================
+
+        def text_format(str)
+            str.sub!(/年/, '/')
+            str.sub!(/月/, '/')
+            str.sub!(/日/, '')
+            str.sub!(/発売/, '')
+        end
+        
+
+
+        #   ===================
         #        定数管理
         #   ===================
         
@@ -42,7 +55,7 @@ namespace :scrape_data do
         end
 
         #結果格納配列(2月分発表されているので、月で分ける)
-        results = Array.new(2).map{Array.new(0)}
+        results = Array.new(0)
 
         #全htmlを取得する
         doc = Nokogiri::HTML.parse(html, nil, charset)
@@ -59,8 +72,8 @@ namespace :scrape_data do
         t = Time.new
         date = t.strftime("%Y/%m/%d/%H")
         
-        #配列の添字
-        cnt = 0
+        #レーベル
+        label = "電撃文庫"
 
         two_ul.each do |ulists|
             lists = ulists.xpath(LIST)
@@ -81,13 +94,10 @@ namespace :scrape_data do
                 subtitle = subtitle_node[0].inner_text
                 img = img_node.attribute('src').value
                 isbn = tables_node[0].inner_text
-                publish_date = tables_node[1].inner_text
+                publish_date = text_format(tables_node[1].inner_text)
                 price = tables_node[2].inner_text
-                results[cnt] << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num}
+                results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label}
             end
-            #添字切り替え
-            cnt+=1
-
             #翌月に切り替え
             month_num = next_month_num
         end
@@ -97,14 +107,17 @@ namespace :scrape_data do
         #     DBへの書き込み
         #   ===================
 
-        month = 2
-
         results.each do |r|
-            p "----------#{month}月の新刊----------"
-            r.each do |texts|
-                p texts
-            end
-            month+=1
+            p r
+        end
+
+        puts "インポート処理を開始"
+        # インポートができなかった場合の例外処理
+        begin
+            Book.create!(results)
+            puts "インポート完了!!"
+        rescue ActiveModel::UnknownAttributeError => invalid
+            puts "インポートに失敗：UnknownAttributeError"
         end
 
     end
