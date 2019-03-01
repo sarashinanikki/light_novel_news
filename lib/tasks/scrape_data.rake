@@ -1,19 +1,23 @@
-#   ===================
-#   ライブラリ読み込み
-#   ===================
+#   ========================
+#      ライブラリ読み込み
+#   ========================
+
 require 'open-uri'
 require 'time'
 
+#   ========================
+#           処理本体
+#   ========================
 
-#   ===================
-#       メイン処理
-#   ===================
 namespace :scrape_data do
+    #   ========================
+    #           電撃文庫
+    #   ========================
     desc '電撃文庫の新刊情報取得'
     task :dengeki => :environment do
-        #   ===================
-        #       文字列処理
-        #   ===================
+        #   ========================
+        #          文字列処理
+        #   ========================
 
         def text_format(str)
             str.sub!(/年/, '/')
@@ -21,12 +25,10 @@ namespace :scrape_data do
             str.sub!(/日/, '')
             str.sub!(/発売/, '')
         end
-        
 
-
-        #   ===================
-        #        定数管理
-        #   ===================
+        #   ========================
+        #           定数管理
+        #   ========================
         
         #スクレイピング先のURL
         URL = 'https://dengekibunko.jp/product/newrelease-bunko.html'
@@ -44,9 +46,9 @@ namespace :scrape_data do
         IMG = './/img[@class="js-img-fallback p-books-media02__img img-fluid m-0"]'
         TABLES = './/table[@class="p-books-media02__info d-none d-md-table"]//td'
 
-        #   ===================
-        #     スクレイピング
-        #   ===================
+        #   ========================
+        #        スクレイピング
+        #   ========================
 
         charset = nil
         html = open(URL) do |f|
@@ -103,9 +105,9 @@ namespace :scrape_data do
         end
 
 
-        #   ===================
-        #     DBへの書き込み
-        #   ===================
+        #   ========================
+        #        DBへの書き込み
+        #   ========================
 
         results.each do |re|
             p re
@@ -115,6 +117,7 @@ namespace :scrape_data do
         # インポートができなかった場合の例外処理
         exception_flag = false
 
+        # 重複しないよう1つずつ確認してDBに保存する
         results.each do |re|
             if (Book.where(ISBN: re[:ISBN]).count < 1)
                 if !(Book.create(re))
@@ -128,5 +131,70 @@ namespace :scrape_data do
         else
             puts "インポートに失敗：UnknownAttributeError"
         end
+    end
+
+    #   ========================
+    #    富士見ファンタジア文庫
+    #   ========================    
+
+    desc '富士見ファンタジア文庫の新刊情報取得'
+    task :hujimi_fantasia => :environment do
+
+        #   ========================
+        #           定数管理
+        #   ========================
+        
+        #スクレイピング先のURL
+        URL = 'http://www.fujimishobo.co.jp/novel/fantasia.php'
+        #何月刊行かを取得するパス
+        MONTH = '//div[@class="new_title"]'
+        #詳細情報が載っているURLを取得するパス
+        BOOKS_URL = '//p[@class="book-title"]'
+        #タイトルを取得するパス
+        TITLE = './/h1[@class="book-title"]'
+        #著者と絵師を取得するパス
+        AUTHORS = './/a[@class="p-books-media__authors-link"]'
+        #タイトル、URL、著者、絵師、サブタイトル、画像、ISBN、発売日、値段を取得するパス
+        #サブタイトルを取得するパス
+        SUBTITLES = './/p[@class="p-books-media__lead"]'
+        IMG = './/img[@class="js-img-fallback p-books-media02__img img-fluid m-0"]'
+        TABLES = './/table[@class="p-books-media02__info d-none d-md-table"]//td'
+
+        #   ========================
+        #        スクレイピング
+        #   ========================
+
+        charset = nil
+        html = open(URL) do |f|
+            charset = f.charset
+            f.read
+        end
+
+        #結果格納配列
+        results = Array.new(0)
+
+        #全htmlを取得する
+        doc = Nokogiri::HTML.parse(html, nil, charset)
+        
+        #各詳細情報ページのリンクが書かれた段落を取得する
+        p_node = doc.xpath(BOOKS_URL)
+
+        p_node.each do |paras|
+            #詳細情報ページへのURL取得
+            url_objects = paras.xpath('.//a').attribute('href').value
+            
+            #詳細情報ページの全htmlを取得
+            sub_charset = nil
+            sub_html = open(url_objects) do |f|
+                sub_charset = f.charset
+                f.read
+            end
+            sub_doc = Nokogiri::HTML.parse(sub_html, nil, sub_charset)
+
+            #各ノードの取得
+            title_node = sub_doc.xpath(TITLE)
+
+        end
+
     end
 end
