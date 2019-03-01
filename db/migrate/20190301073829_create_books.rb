@@ -10,7 +10,7 @@ class CreateBooks < ActiveRecord::Migration[5.2]
       t.string :date
       t.string :price
       t.string :url
-      t.int :month
+      t.integer :month
       t.timestamps
     end
   end
