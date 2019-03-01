@@ -141,6 +141,35 @@ namespace :scrape_data do
     task :hujimi_fantasia => :environment do
 
         #   ========================
+        #          文字列処理
+        #   ========================
+
+        def text_split(str)
+            ret = str.split(' ')
+            return ret
+        end
+
+        def text_format(str)
+            str.sub!(/年/, '/')
+            str.sub!(/月/, '/')
+            str.sub!(/日/, '')
+        end
+
+        def detect_month(str)
+            12.downto(1) do |i|
+                if (str.include?("#{i}月"))
+                    return i
+                end
+            end
+        end
+        
+        def text_strip(str)
+            ret = str.gsub!(/(\r\n|\r|\n|\f)/, "")
+            ret.gsub(/ /, "")
+        end
+
+
+        #   ========================
         #           定数管理
         #   ========================
         
@@ -151,14 +180,19 @@ namespace :scrape_data do
         #詳細情報が載っているURLを取得するパス
         BOOKS_URL = '//p[@class="book-title"]'
         #タイトルを取得するパス
-        TITLE = './/h1[@class="book-title"]'
-        #著者と絵師を取得するパス
-        AUTHORS = './/a[@class="p-books-media__authors-link"]'
-        #タイトル、URL、著者、絵師、サブタイトル、画像、ISBN、発売日、値段を取得するパス
+        TITLE = '//h1[@class="book-title"]'
         #サブタイトルを取得するパス
-        SUBTITLES = './/p[@class="p-books-media__lead"]'
-        IMG = './/img[@class="js-img-fallback p-books-media02__img img-fluid m-0"]'
-        TABLES = './/table[@class="p-books-media02__info d-none d-md-table"]//td'
+        SUBTITLE = '//p[@class="book-title-sub"]'
+        #著者と絵師を取得するパス
+        AUTHORS = '//span[@class="authors-pc"]'
+        #値段を取得するパス
+        PRICE = '//li[@class="book-info-price"]'
+        #発売日を取得するパス
+        PUBLISH_DATE = '//dd[@class="detail-release-text"]'
+        #ISBNを取得するパス
+        ISBN = '//dd[@class="detail-isbn-text"]'
+        #画像を取得するパス
+        IMG = '//img[@class="lazy displayBookCover"]'
 
         #   ========================
         #        スクレイピング
@@ -173,19 +207,31 @@ namespace :scrape_data do
         #結果格納配列
         results = Array.new(0)
 
+        
+        #現在時刻を取得する
+        t = Time.new
+        date = t.strftime("%Y/%m/%d/%H")
+        
+        #レーベル
+        label = "富士見ファンタジア文庫"
+        
         #全htmlを取得する
         doc = Nokogiri::HTML.parse(html, nil, charset)
         
+        #何月刊行か取得する
+        month_num_node = doc.xpath(MONTH)
+        month_num = detect_month(month_num_node.inner_text)
+
         #各詳細情報ページのリンクが書かれた段落を取得する
         p_node = doc.xpath(BOOKS_URL)
 
         p_node.each do |paras|
             #詳細情報ページへのURL取得
-            url_objects = paras.xpath('.//a').attribute('href').value
+            books_url = paras.xpath('.//a').attribute('href').value
             
             #詳細情報ページの全htmlを取得
             sub_charset = nil
-            sub_html = open(url_objects) do |f|
+            sub_html = open(books_url) do |f|
                 sub_charset = f.charset
                 f.read
             end
@@ -193,8 +239,47 @@ namespace :scrape_data do
 
             #各ノードの取得
             title_node = sub_doc.xpath(TITLE)
+            subtitle_node = sub_doc.xpath(SUBTITLE)
+            authors_node = sub_doc.xpath(AUTHORS)
+            price_node = sub_doc.xpath(PRICE)
+            publish_date_node = sub_doc.xpath(PUBLISH_DATE)
+            isbn_node = sub_doc.xpath(ISBN)
+            img_node = sub_doc.xpath(IMG)
 
+            title = title_node[0].inner_text
+            subtitle = subtitle_node[0].inner_text
+            authors = text_split(authors_node.inner_text)
+            author = authors[0]
+            illustrator = authors[1]
+            price = text_strip(price_node[0].inner_text)
+            publish_date = text_format(publish_date_node[0].inner_text)
+            isbn = isbn_node.inner_text
+            img = img_node.attribute('src').value
+            results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label}
+            sleep(0.5)
         end
 
+        results.each do |re|
+            p re
+        end
+
+        puts "インポート処理を開始"
+        # インポートができなかった場合の例外処理
+        exception_flag = false
+
+        # 重複しないよう1つずつ確認してDBに保存する
+        results.each do |re|
+            if (Book.where(ISBN: re[:ISBN]).count < 1)
+                if !(Book.create(re))
+                    exception_flag = true
+                end
+            end
+        end
+            
+        if !(exception_flag)
+            puts "インポート完了!!"
+        else
+            puts "インポートに失敗：UnknownAttributeError"
+        end
     end
 end
