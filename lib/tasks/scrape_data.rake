@@ -54,7 +54,7 @@ namespace :scrape_data do
             f.read
         end
 
-        #結果格納配列(2月分発表されているので、月で分ける)
+        #結果格納配列
         results = Array.new(0)
 
         #全htmlを取得する
@@ -107,18 +107,26 @@ namespace :scrape_data do
         #     DBへの書き込み
         #   ===================
 
-        results.each do |r|
-            p r
+        results.each do |re|
+            p re
         end
 
         puts "インポート処理を開始"
         # インポートができなかった場合の例外処理
-        begin
-            Book.create!(results)
+        exception_flag = false
+
+        results.each do |re|
+            if (Book.where(ISBN: re[:ISBN]).count < 1)
+                if !(Book.create(re))
+                    exception_flag = true
+                end
+            end
+        end
+            
+        if !(exception_flag)
             puts "インポート完了!!"
-        rescue ActiveModel::UnknownAttributeError => invalid
+        else
             puts "インポートに失敗：UnknownAttributeError"
         end
-
     end
 end
