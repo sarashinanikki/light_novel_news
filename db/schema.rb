@@ -18,10 +18,11 @@ ActiveRecord::Schema.define(version: 2019_03_01_073829) do
     t.string "illustrator"
     t.string "subtitle"
     t.string "img"
-    t.string "isbn"
-    t.string "date"
+    t.string "ISBN"
+    t.string "publish_date"
     t.string "price"
-    t.string "url"
+    t.string "books_url"
+    t.string "scrape_date"
     t.integer "month"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

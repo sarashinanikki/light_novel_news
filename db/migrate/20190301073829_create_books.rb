@@ -6,10 +6,11 @@ class CreateBooks < ActiveRecord::Migration[5.2]
       t.string :illustrator
       t.string :subtitle
       t.string :img
-      t.string :isbn
-      t.string :date
+      t.string :ISBN
+      t.string :publish_date
       t.string :price
-      t.string :url
+      t.string :books_url
+      t.string :scrape_date
       t.integer :month
       t.timestamps
     end
