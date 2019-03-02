@@ -18,6 +18,9 @@ namespace :scrape_data do
         #   ========================
         #          文字列処理
         #   ========================
+        def text_strip(str)
+            str.gsub(/(\r\n|\r|\n|\f)/, "")
+        end
 
         def text_format(str)
             str.sub!(/年/, '/')
@@ -43,6 +46,7 @@ namespace :scrape_data do
         BOOKS_URL = 'a'
         AUTHORS = './/a[@class="p-books-media__authors-link"]'
         SUBTITLES = './/p[@class="p-books-media__lead"]'
+        DESCRIPTION = './/p[@class="p-books-media__summary"]'
         IMG = './/img[@class="js-img-fallback p-books-media02__img img-fluid m-0"]'
         TABLES = './/table[@class="p-books-media02__info d-none d-md-table"]//td'
 
@@ -87,6 +91,7 @@ namespace :scrape_data do
                 subtitle_node = li.xpath(SUBTITLES)
                 img_node = li.xpath(IMG)
                 tables_node = li.xpath(TABLES)
+                description_node = li.xpath(DESCRIPTION)
 
                 #各テキストデータの取得
                 title = title_node.inner_text
@@ -97,8 +102,9 @@ namespace :scrape_data do
                 img = img_node.attribute('src').value
                 isbn = tables_node[0].inner_text
                 publish_date = text_format(tables_node[1].inner_text)
+                description = text_strip(description_node[0].inner_text)
                 price = tables_node[2].inner_text
-                results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label}
+                results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label, desc: description}
             end
             #翌月に切り替え
             month_num = next_month_num
@@ -193,6 +199,8 @@ namespace :scrape_data do
         ISBN = '//dd[@class="detail-isbn-text"]'
         #画像を取得するパス
         IMG = '//img[@class="lazy displayBookCover"]'
+        #あらすじを取得するパス
+        DESCRIPTION = '//span[@class="show-text"]'
 
         #   ========================
         #        スクレイピング
@@ -244,6 +252,7 @@ namespace :scrape_data do
             price_node = sub_doc.xpath(PRICE)
             publish_date_node = sub_doc.xpath(PUBLISH_DATE)
             isbn_node = sub_doc.xpath(ISBN)
+            description_node = sub_doc.xpath(DESCRIPTION)
             img_node = sub_doc.xpath(IMG)
 
             title = title_node[0].inner_text
@@ -254,8 +263,9 @@ namespace :scrape_data do
             price = text_strip(price_node[0].inner_text)
             publish_date = text_format(publish_date_node[0].inner_text)
             isbn = isbn_node.inner_text
+            description = description_node.inner_text
             img = img_node.attribute('src').value
-            results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label}
+            results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label, desc: description}
             sleep(0.5)
         end
 
