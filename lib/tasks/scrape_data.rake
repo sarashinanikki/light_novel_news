@@ -34,7 +34,7 @@ namespace :scrape_data do
         URL = 'https://dengekibunko.jp/product/newrelease-bunko.html'
         #何月刊行かを取得するパス
         MONTH = '//span[@class="month"]'
-        #<ul>があるのでそれを取得パス
+        #<ul>があるのでそれを取得するパス
         ULIST = '//ul[@class="js-summary-product-list-with-image p-product-media list-unstyled"]'
         #各リストを取得するパス
         LIST = './/li[@class="p-books-media02__wrap -border js-summary-product-list-item"]'

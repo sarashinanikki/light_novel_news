@@ -1,2 +1,38 @@
-<h1>Books#latest</h1>
-<p>Find me in app/views/books/latest.html.erb</p>
+<header>
+        <div class="header-logo"><a href="light_novel.html">Light novels news</a></div>
+        <nav>
+            <ul>
+                <li><a href="light_novel.html">TOP</a></li>
+                <li><a href="light_novel_about.html">ABOUT</a></li>
+                <li><a href="light_novel_archive.html">ARCHIVE</a></li>
+                <li><a href="light_novel_discussion.html">DISCUSSION</a></li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <main>
+        <div class="main_top">TOP</div>
+        <h1 class="main-menu">3月の新刊</h1>
+
+        <% @book_infos.each do |info| %>
+            <div class="contents-item">
+            <img class="contents-img" src=<%=info.img %>> 
+            <p class="information" id="title"><a href=<%=info.books_url%>><%= info.title%></a></p>
+            <p class="information"><%=info.author %></p>
+            <p class="information"><%=info.illustrator %></p>
+            <p class="information"><%=info.price %></p>
+            <p class="information"><%=info.publish_date %></p>
+            <p class="information"><%=info.ISBN %></p>
+            <p class="information"><%=info.label %></p>
+            <p class="description"><%=info.desc %></p>
+            </div>
+     <% end %>
+    </main>
+
+    <footer>
+    <div class="footer-logo"><a href="light_novel.html">Light novels</a></div>
+    <div class="Github">Github: sarashinanikki</div>
+    </footer>
+    
+    <script src="light_novel.js"></script>
