@@ -1,2 +1,40 @@
-<h1>Books#archives</h1>
-<p>Find me in app/views/books/archives.html.erb</p>
+<header>
+        <div class="header-logo"><a href="/books/latest">Light novels news</a></div>
+        <nav>
+            <ul>
+                <li><a href="/books/latest">TOP</a></li>
+                <li><a href="light_novel_about.html">ABOUT</a></li>
+                <li><a href="/books/archives/20190201">ARCHIVE</a></li>
+                <li><a href="light_novel_discussion.html">DISCUSSION</a></li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <main>
+        <div class="main_top">TOP</div>
+        <h1 class="main-menu"><%= @year_month %>に発売したライトノベル</h1>
+
+        <% @book_infos.each do |info| %>
+                <div class="contents-item">
+                    <img class="contents-img" src=<%=info.img %> height="300"> 
+                    <p class="information" id="title"><a href=<%=info.books_url%>><%= info.title%></a></p>
+                    <p class="information" id="subtitle"><%=info.subtitle%></p>
+                    <p class="information">著者: <%=info.author %>  イラスト: <%=info.illustrator %></p>
+                    <p class="information">価格 <%=info.price %></p>
+                    <p class="information">発売日 <%=info.publish_date %></p>
+                    <p class="information">ISBN <%=info.ISBN %></p>
+                    <p class="information">レーベル <%=info.label %></p>
+                    <p class="description">あらすじ<br><%=info.desc %></p>
+                </div>
+                <div class="art-border"></div>
+            <% end %>
+    </main>
+
+    <footer>
+    <div class="footer-logo"><a href="/books/latest">Light novels</a></div>
+    <div class="Github">Github: sarashinanikki</div>
+    </footer>
+    
+    <script src="light_novel.js"></script>
+
