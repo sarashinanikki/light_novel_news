@@ -1,2 +1,7 @@
 <h1>Books#latest</h1>
-<p>Find me in app/views/books/latest.html.erb</p>
+
+
+<% @book_infos.each do |info| %>
+    <p><%= info.title%></p>
+<% end %>
+
