@@ -17,7 +17,7 @@
 
         <% @book_infos.each do |info| %>
                 <div class="contents-item">
-                    <img class="contents-img" src=<%=info.img %> height="300"> 
+                    <img class="contents-img" src=<%=info.img %> height="320"> 
                     <p class="information" id="title"><a href=<%=info.books_url%>><%= info.title%></a></p>
                     <p class="information" id="subtitle"><%=info.subtitle%></p>
                     <p class="information">著者: <%=info.author %>  イラスト: <%=info.illustrator %></p>
