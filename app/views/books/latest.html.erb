@@ -15,8 +15,8 @@
         <div class="main_top">TOP</div>
         <h1 class="main-menu">N月の新刊</h1>
 
+        <span>
         <% @book_infos.each do |info| %>
-           <span>
             <div class="contents-item">
             <img class="contents-img" src=<%=info.img %>> 
             <p class="information" id="title"><a href=<%=info.books_url%>><%= info.title%></a></p>
@@ -28,8 +28,8 @@
             <p class="information"><%=info.label %></p>
             <p class="description"><%=info.desc %></p>
             </div>
+            <% end %>
             </span>
-     <% end %>
     </main>
 
     <footer>
