@@ -62,6 +62,15 @@ main a {
 
 .contents-item {
   font-size: 18px;
+  width: auto;
+  margin-bottom: 10px;
+}
+.contents-text{
+    float: right;
+}
+.art-border {
+    padding: 20px;
+    border-bottom: medium solid #71BAEC;
 }
 
 .description {
@@ -77,6 +86,10 @@ main a {
 
 #title {
   font-size: 30px;
+}
+#subtitle{
+  font-size:22px;
+  color: red
 }
 
 footer {

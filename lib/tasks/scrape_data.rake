@@ -23,11 +23,10 @@ namespace :scrape_data do
         end
 
         def text_format(str)
-            str.sub!(/年/, '/')
-            str.sub!(/月/, '/')
-            str.sub!(/日/, '')
-            str.sub!(/発売/, '')
+            t = Time.strptime(str, "%Y年 %m月%d日")
+            t.strftime("%Y/%m/%d")
         end
+
 
         #   ========================
         #           定数管理
@@ -156,9 +155,8 @@ namespace :scrape_data do
         end
 
         def text_format(str)
-            str.sub!(/年/, '/')
-            str.sub!(/月/, '/')
-            str.sub!(/日/, '')
+            t = Time.strptime(str, "%Y年 %m月%d日")
+            t.strftime("%Y/%m/%d")
         end
 
         def detect_month(str)
@@ -181,10 +179,12 @@ namespace :scrape_data do
         
         #スクレイピング先のURL
         URL = 'http://www.fujimishobo.co.jp/novel/fantasia.php'
+        #各書籍のデータを取得するパス
+        BOOK_LIST = '//div[@class="inner"]'
         #何月刊行かを取得するパス
         MONTH = '//div[@class="new_title"]'
         #詳細情報が載っているURLを取得するパス
-        BOOKS_URL = '//p[@class="book-title"]'
+        BOOKS_URL = './/div[@class="common_book_box"]'
         #タイトルを取得するパス
         TITLE = '//h1[@class="book-title"]'
         #サブタイトルを取得するパス
@@ -198,7 +198,7 @@ namespace :scrape_data do
         #ISBNを取得するパス
         ISBN = '//dd[@class="detail-isbn-text"]'
         #画像を取得するパス
-        IMG = '//img[@class="lazy displayBookCover"]'
+        IMG = './/img'
         #あらすじを取得するパス
         DESCRIPTION = '//span[@class="show-text"]'
 
@@ -230,10 +230,13 @@ namespace :scrape_data do
         month_num_node = doc.xpath(MONTH)
         month_num = detect_month(month_num_node.inner_text)
 
-        #各詳細情報ページのリンクが書かれた段落を取得する
-        p_node = doc.xpath(BOOKS_URL)
+        #各書籍のリストを取得
+        book_list_node = doc.xpath(BOOK_LIST)
+        
+        book_list_node.each do |bl|
+            #各詳細情報ページのリンクが書かれた段落を取得する
+            paras = bl.xpath(BOOKS_URL)
 
-        p_node.each do |paras|
             #詳細情報ページへのURL取得
             books_url = paras.xpath('.//a').attribute('href').value
             
@@ -253,7 +256,7 @@ namespace :scrape_data do
             publish_date_node = sub_doc.xpath(PUBLISH_DATE)
             isbn_node = sub_doc.xpath(ISBN)
             description_node = sub_doc.xpath(DESCRIPTION)
-            img_node = sub_doc.xpath(IMG)
+            img_node = bl.xpath(IMG)
 
             title = title_node[0].inner_text
             subtitle = subtitle_node[0].inner_text
@@ -264,7 +267,8 @@ namespace :scrape_data do
             publish_date = text_format(publish_date_node[0].inner_text)
             isbn = isbn_node.inner_text
             description = description_node.inner_text
-            img = img_node.attribute('src').value
+            img = "http://www.fujimishobo.co.jp"
+            img = img+img_node.attribute('src').value
             results << {title: title, author: author, illustrator: illustrator, subtitle: subtitle, img: img, ISBN: isbn, publish_date: publish_date, price: price, books_url: books_url, scrape_date: date, month: month_num, label: label, desc: description}
             sleep(0.5)
         end
