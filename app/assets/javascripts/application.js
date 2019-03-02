@@ -14,3 +14,8 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
+
+function Archive_select() {
+    var browser = document.Archive_form.Archive.value;
+    location.href = browser
+}
