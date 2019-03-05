@@ -21,11 +21,6 @@ header {
   font-size: 40px;
 }
 
-.contents-img {
-  float: left;
-  margin-right: 50px;
-}
-
 header a {
   text-decoration: none;
   color: white;
@@ -60,8 +55,19 @@ main a {
   font-family: 'Kosugi Maru', sans-serif;
 }
 
+.contents-img {
+  float: left;
+  margin-right: 50px;
+}
+
 .contents-item {
   font-size: 18px;
+  height: 350px;
+}
+
+.border {
+  border-bottom: 5px solid  #71BAEC;
+  padding-top: 30px;
 }
 
 .description {
@@ -77,6 +83,11 @@ main a {
 
 #title {
   font-size: 30px;
+}
+
+#subtitle {
+  font-size: 22px;
+  color: #F02158;
 }
 
 footer {
