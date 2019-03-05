@@ -1,11 +1,11 @@
 <header>
-        <div class="header-logo"><a href="light_novel.html">Light novels news</a></div>
+        <div class="header-logo"><a href="/books/latest">Light novels news</a></div>
         <nav>
             <ul>
-                <li><a href="light_novel.html">TOP</a></li>
-                <li><a href="light_novel_about.html">ABOUT</a></li>
-                <li><a href="light_novel_archive.html">ARCHIVE</a></li>
-                <li><a href="light_novel_discussion.html">DISCUSSION</a></li>
+                <li><a href="/books/latest">TOP</a></li>
+                <li><a href="/books/about">ABOUT</a></li>
+                <li><a href="/books/archives/">ARCHIVE</a></li>
+                <li><a href="/books/discussion">DISCUSSION</a></li>
             </ul>
         </nav>
 
@@ -13,27 +13,32 @@
 
     <main>
         <div class="main_top">TOP</div>
-        <h1 class="main-menu">N月の新刊</h1>
-
+        <h1 class="main-menu">今月の新刊</h1>
+        
         <span>
+        <%cnt = 0 %>
         <% @book_infos.each do |info| %>
+            <div class="border"></div>
             <div class="contents-item">
-            <img class="contents-img" src=<%=info.img %>> 
-            <p class="information" id="title"><a href=<%=info.books_url%>><%= info.title%></a></p>
-            <p class="information"><%=info.author %></p>
-            <p class="information"><%=info.illustrator %></p>
-            <p class="information"><%=info.price %></p>
-            <p class="information"><%=info.publish_date %></p>
-            <p class="information"><%=info.ISBN %></p>
-            <p class="information"><%=info.label %></p>
+            <img class="contents-img" src=<%=info.img %> height="350" > 
+            <p class="information" id="title"><a href=<%=info.books_url%> target="_blank"><%= info.title%></a></p>
+            <p class="information" id="subtitle"><%= info.subtitle%></p>
+            <p class="information">著者：<%=info.author %></p>
+            <p class="information">イラストレーター：<%=info.illustrator %></p>
+            <p class="information">価格：<%=info.price %></p>
+            <p class="information">発売日：<%=info.publish_date %></p>
+            <p class="information">ISBN：<%=info.ISBN %></p>
+            <p class="information" id="label">レーベル：<%=info.label %></p>
             <p class="description"><%=info.desc %></p>
             </div>
+            <%cnt+=1%>
             <% end %>
+
             </span>
     </main>
 
     <footer>
-    <div class="footer-logo"><a href="light_novel.html">Light novels</a></div>
+    <div class="footer-logo"><a href="/books/latest">Light novels</a></div>
     <div class="Github">Github: sarashinanikki</div>
     </footer>
     
