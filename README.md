@@ -8,3 +8,4 @@ This site is what scrape some publisher site and gather information.
 * Publisher gathered information
  * 電撃文庫
  * 富士見ファンタジア文庫
+ * MF文庫J
