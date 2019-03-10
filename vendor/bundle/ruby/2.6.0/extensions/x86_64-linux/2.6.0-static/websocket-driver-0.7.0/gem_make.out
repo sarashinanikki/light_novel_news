@@ -1,0 +1,15 @@
+current directory: /home/sarashin/Documents/job/light_novels_news/product/light_novel_news/vendor/bundle/ruby/2.6.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+/home/sarashin/.rbenv/versions/2.6.1/bin/ruby -I /home/sarashin/.rbenv/versions/2.6.1/lib/ruby/2.6.0 -r ./siteconf20190308-26617-17otyw0.rb extconf.rb
+creating Makefile
+
+current directory: /home/sarashin/Documents/job/light_novels_news/product/light_novel_news/vendor/bundle/ruby/2.6.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+make "DESTDIR=" clean
+
+current directory: /home/sarashin/Documents/job/light_novels_news/product/light_novel_news/vendor/bundle/ruby/2.6.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+make "DESTDIR="
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: /home/sarashin/Documents/job/light_novels_news/product/light_novel_news/vendor/bundle/ruby/2.6.0/gems/websocket-driver-0.7.0/ext/websocket-driver
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 websocket_mask.so ./.gem.20190308-26617-1s14llo
