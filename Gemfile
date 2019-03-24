@@ -63,5 +63,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #for scraping
 gem 'nokogiri'
-
+#for jquery
 gem 'jquery-rails'
+
+#for cron
+gem 'whenever'
