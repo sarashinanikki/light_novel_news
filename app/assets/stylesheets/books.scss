@@ -18,20 +18,8 @@ header{
     float: left;
     padding:20px 30px;
     font-size: 40px;
-   
 }
 
-.contents-img{
-    float: left;
-    margin-right: 50px;
-}
-.contents-text{
-    float: right;
-}
-.art-border {
-    padding: 30px;
-    border-bottom: medium solid #71BAEC;
-}
 header a{
     text-decoration: none;
     color:white;
@@ -49,8 +37,6 @@ header li{
     padding:35px 30px;
     font-size: 22px;
 }
-
-
 main{
     height:auto;
     margin-top:40px;
@@ -63,10 +49,17 @@ main a{
 .information{
     font-family: 'Kosugi Maru', sans-serif;
 }
+.contents-img{
+    float: left;
+    margin-right: 50px;
+}
 .contents-item{
     font-size:18px;
-    width: auto;
-    margin-bottom: 10px;
+    height: 350px;
+}
+.border{
+    border-bottom:5px solid  #71BAEC;
+    padding-top:30px;
 }
 .description{
     display: none;
@@ -81,8 +74,8 @@ main a{
     font-size:30px;
 }
 #subtitle{
-    font-size:20px;
-    color: red
+    font-size: 22px;
+    color:#F02158;
 }
 footer{
     background-color:#71BAEC;

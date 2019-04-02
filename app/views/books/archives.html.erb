@@ -4,7 +4,7 @@
             <ul>
                 <li><a href="/books/latest">TOP</a></li>
                 <li><a href="light_novel_about.html">ABOUT</a></li>
-                <li><a href="/books/archives/20190201">ARCHIVE</a></li>
+                <li><a href="/books/index">ARCHIVE</a></li>
                 <li><a href="light_novel_discussion.html">DISCUSSION</a></li>
             </ul>
         </nav>
@@ -13,7 +13,7 @@
 
     <main>
         <div class="main_top">TOP</div>
-        <h1 class="main-menu"><%= @year_month %>に発売したライトノベル</h1>
+        <h1 class="main-menu"><%= @year_month %>発売のライトノベル</h1>
 
         <% @book_infos.each do |info| %>
                 <div class="contents-item">

@@ -21,11 +21,6 @@ header {
   font-size: 40px;
 }
 
-.contents-img {
-  float: left;
-  margin-right: 50px;
-}
-
 header a {
   text-decoration: none;
   color: white;
@@ -60,17 +55,19 @@ main a {
   font-family: 'Kosugi Maru', sans-serif;
 }
 
+.contents-img {
+  float: left;
+  margin-right: 50px;
+}
+
 .contents-item {
   font-size: 18px;
-  width: auto;
-  margin-bottom: 10px;
+  height: 350px;
 }
-.contents-text{
-    float: right;
-}
-.art-border {
-    padding: 30px;
-    border-bottom: medium solid #71BAEC;
+
+.border {
+  border-bottom: 5px solid  #71BAEC;
+  padding-top: 30px;
 }
 
 .description {
@@ -90,6 +87,11 @@ main a {
 #subtitle{
   font-size:20px;
   color: red
+}
+
+#subtitle {
+  font-size: 22px;
+  color: #F02158;
 }
 
 footer {

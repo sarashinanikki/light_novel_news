@@ -1,0 +1,12 @@
+/*$(function(){
+    $('img').hover(
+        function(){
+            $('.information').hide();
+            $('.description').fadeIn(500);
+        },
+        function(){
+            $('.description').hide();
+            $('.information').fadeIn(500);
+        }
+    )
+})*/
