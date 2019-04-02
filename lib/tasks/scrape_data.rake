@@ -285,7 +285,7 @@ namespace :scrape_data do
         results.each do |re|
             if (Book.where(ISBN: re[:ISBN]).count < 1)
                 if !(Book.create(re))
-                    exception_flag = true
+                    exceMFJption_flag = true
                 end
             end
         end

@@ -11,7 +11,6 @@ This site is what scrape some publisher site and gather information.
  * MF文庫J
 
 * 今後の課題
-  * 定期的にスクレイピングさせる
   * 対応レーベルを増やす
   * 絞り込み機能やソート機能をつける
   * 新発表があった場合ユーザーに通知する(ユーザー登録機能が必要そう)
